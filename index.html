@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Campus Navigation System (SCNS)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="logo-title">
+      <!-- Replace src with your SCNS logo path -->
+      <img src="https://uploads.onecompiler.io/446rrd6xr/446shm87f/SCNS%20logo.png" alt="SCNS Logo" class="logo" />
+      <div>
+        <h1>Smart Campus Navigation System (SCNS)</h1>
+        <p class="tagline">Find any room, lab, or facility in seconds</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="badge">Prototype</span>
+      <span class="current-role" id="currentRoleLabel">Role: Guest</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- WELCOME / LOGIN SCREEN -->
+    <section id="welcomeScreen">
+      <section class="welcome-hero">
+        <div class="welcome-text">
+          <h2>Welcome to SCNS</h2>
+          <p>
+            A simple campus room and facility navigation prototype with role-based access for
+            Students, Teachers, Class Representatives (CR), and Guests.
+          </p>
+          <div class="welcome-actions">
+            <button id="guestBtn" class="btn primary">Continue as Guest</button>
+            <button id="loginBtn" class="btn outline">Login</button>
+          </div>
+        </div>
+        <div class="quick-highlights">
+          <h3>What you can do</h3>
+          <ul>
+            <li>Search rooms by number, block, floor, or type.</li>
+            <li>See a 2D sketch of the selected block & floor.</li>
+            <li>Check important locations like office, labs, library, and canteen.</li>
+            <li>CR and Teachers can update room status and classes (Phase 2).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- LOGIN OPTIONS -->
+      <section id="loginOptions" class="card login-card hidden">
+        <h3>Select your role</h3>
+        <div class="login-choice-row">
+          <button id="studentLoginBtn" class="btn outline">Student Login</button>
+          <button id="teacherLoginBtn" class="btn outline">Teacher Login</button>
+          <button id="crLoginBtn" class="btn outline">CR Login</button>
+        </div>
+
+        <!-- Student form -->
+        <form id="studentLoginForm" class="login-form hidden">
+          <h4>Student Login</h4>
+          <div class="form-row">
+            <label for="studentName">Name</label>
+            <input type="text" id="studentName" placeholder="e.g., Hruthik" />
+          </div>
+          <div class="form-row">
+            <label for="studentUsn">USN</label>
+            <input type="text" id="studentUsn" placeholder="e.g., 2025cs0038" />
+          </div>
+          <button type="button" id="studentSubmitBtn" class="btn primary">Login as Student</button>
+          <p class="hint">Demo: Hruthik / 2025cs0038</p>
+        </form>
+
+        <!-- Teacher form -->
+        <form id="teacherLoginForm" class="login-form hidden">
+          <h4>Teacher Login</h4>
+          <div class="form-row">
+            <label for="teacherName">Name</label>
+            <input type="text" id="teacherName" placeholder="e.g., Rohan" />
+          </div>
+          <div class="form-row">
+            <label for="teacherPass">Password</label>
+            <input type="password" id="teacherPass" placeholder="e.g., rohan7" />
+          </div>
+          <button type="button" id="teacherSubmitBtn" class="btn primary">Login as Teacher</button>
+          <p class="hint">Demo: rohan / rohan7</p>
+        </form>
+
+        <!-- CR form -->
+        <form id="crLoginForm" class="login-form hidden">
+          <h4>Class Representative (CR) Login</h4>
+          <div class="form-row">
+            <label for="crName">Name</label>
+            <input type="text" id="crName" placeholder="e.g., Messi" />
+          </div>
+          <div class="form-row">
+            <label for="crPass">Password</label>
+            <input type="password" id="crPass" placeholder="e.g., 10" />
+          </div>
+          <button type="button" id="crSubmitBtn" class="btn primary">Login as CR</button>
+          <p class="hint">Demo: messi / 10 or ronaldo / 7</p>
+        </form>
+      </section>
+    </section>
+
+    <!-- MAIN APP SCREEN -->
+    <section id="appScreen" class="hidden">
+      <section class="top-bar">
+        <button id="backToWelcomeBtn" class="btn outline small">← Back</button>
+        <div class="top-bar-info">
+          <span id="loggedInUserLabel"></span>
+          <span id="roleInfoLabel"></span>
+        </div>
+      </section>
+
+      <section class="layout">
+        <!-- LEFT: BLOCK & FLOOR SELECTION -->
+        <section class="left-panel">
+          <div class="card">
+            <h3>Select Block</h3>
+            <div class="block-buttons">
+              <button class="block-btn" data-block="S">S-Block</button>
+              <button class="block-btn" data-block="R">R-Block</button>
+              <button class="block-btn" data-block="M">Main Block</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Select Floor</h3>
+            <select id="floorSelect"></select>
+          </div>
+
+          <div class="card">
+            <h3>Filters</h3>
+            <div class="filter-row">
+              <label for="typeFilter">Room type</label>
+              <select id="typeFilter">
+                <option value="">All</option>
+                <option value="Classroom">Classroom</option>
+                <option value="Lab">Lab</option>
+                <option value="Office">Office</option>
+                <option value="Facility">Facility</option>
+              </select>
+            </div>
+            <div class="filter-row">
+              <label for="vacantFilter">Show only vacant rooms</label>
+              <input type="checkbox" id="vacantFilter" />
+            </div>
+            <div class="filter-row">
+              <label for="classFilter">Show rooms with classes</label>
+              <input type="checkbox" id="classFilter" />
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Search Room</h3>
+            <div class="form-row">
+              <label for="roomSearchInput">Room number or keyword</label>
+              <input
+                type="text"
+                id="roomSearchInput"
+                placeholder="e.g., S101, Lab, Office"
+              />
+            </div>
+            <button id="roomSearchBtn" class="btn primary">Search</button>
+            <div id="searchResult" class="search-result"></div>
+          </div>
+        </section>
+
+        <!-- RIGHT: ROOM LIST + MAP + UPDATE PANELS -->
+        <section class="right-panel">
+          <!-- ROOMS TABLE -->
+          <section class="card">
+            <h3>Rooms List</h3>
+            <p class="hint">
+              Showing rooms for selected block and floor, with filters applied.
+            </p>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Room No</th>
+                    <th>Type / Class</th>
+                    <th>Status</th>
+                    <th>Block</th>
+                    <th>Floor</th>
+                  </tr>
+                </thead>
+                <tbody id="roomsTableBody">
+                  <!-- filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- 2D MAP / LAYOUT CARD -->
+          <section class="card">
+            <h3 id="mapTitle">Campus Map – Overview</h3>
+            <p class="hint">
+              2D sketch of the selected block and floor. Changes when you change Block/Floor.
+            </p>
+            <img
+              id="mapImage"
+              src="map_main.png"
+              alt="Campus 2D Map"
+              style="width: 100%; max-height: 320px; object-fit: contain; border-radius: 10px; border: 1px solid #e5e7eb;"
+            />
+          </section>
+
+          <!-- PHASE 2: CR UPDATE PANEL -->
+          <section class="card">
+            <h3>CR: Update Room Status</h3>
+            <p class="hint">
+              Only for Class Representatives (CR). Select a room and mark it as Vacant or Occupied.
+            </p>
+            <div class="form-row">
+              <label for="crRoomSelect">Select room</label>
+              <select id="crRoomSelect">
+                <!-- filled by JS -->
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="crStatusSelect">Status</label>
+              <select id="crStatusSelect">
+                <option value="Vacant">Vacant</option>
+                <option value="Occupied">Occupied</option>
+              </select>
+            </div>
+            <button id="crUpdateBtn" class="btn primary">Update Room Status</button>
+          </section>
+
+          <!-- PHASE 2: TEACHER CLASS UPDATE PANEL -->
+          <section class="card">
+            <h3>Teacher: Update Class & Status</h3>
+            <p class="hint">
+              Only for Teachers. Select a room, set current class, and choose status.
+            </p>
+            <div class="form-row">
+              <label for="teacherRoomSelect">Select room</label>
+              <select id="teacherRoomSelect">
+                <!-- filled by JS -->
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="teacherClassInput">Current class (optional)</label>
+              <input
+                type="text"
+                id="teacherClassInput"
+                placeholder="e.g., 1st year C, 3rd sem A"
+              />
+            </div>
+            <div class="form-row">
+              <label for="teacherStatusSelect">Status</label>
+              <select id="teacherStatusSelect">
+                <option value="Vacant">Vacant</option>
+                <option value="Occupied">Occupied</option>
+              </select>
+            </div>
+            <button id="teacherUpdateBtn" class="btn primary">Update Class & Status</button>
+          </section>
+
+          <!-- IMPORTANT LOCATIONS -->
+          <section class="card">
+            <h3>Important Locations</h3>
+            <p class="hint">Quick access to office, auditorium, library, canteen, etc.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Location</th>
+                  <th>Block</th>
+                  <th>Floor / Area</th>
+                </tr>
+              </thead>
+              <tbody id="importantTableBody">
+                <!-- filled by JS -->
+              </tbody>
+            </table>
+          </section>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    SCNS – Smart Campus Navigation System  Prototype Phase 2 (Map + CR + Teacher update)
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
