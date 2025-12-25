@@ -5,10 +5,41 @@
   <title>Smart Campus Navigation System (SCNS)</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
+  <!-- SCNS AI CHATBOT WIDGET -->
+  <!-- Floating button -->
+  <button id="chatbotToggle">💬</button>
+
+  <!-- Chat window -->
+  <div id="chatbotWidget" class="hidden">
+    <div id="chatbotHeader">
+      <div>
+        <span id="chatbotHeaderTitle">SCNS AI Assistant</span>
+        <small>Ask about NIE North Campus</small>
+      </div>
+      <div>
+        <button id="chatbotFullscreen">⤢</button>
+        <button id="chatbotCloseBtn">&times;</button>
+      </div>
+    </div>
+
+    <div id="chatbotMessages"></div>
+    <div id="chatbotTyping"></div>
+
+    <div id="chatbotInputArea">
+      <input
+        id="chatbotInput"
+        type="text"
+        placeholder="Ask about NIE North Campus..."
+        autocomplete="off"
+      />
+      <button id="chatbotSendBtn">Send</button>
+    </div>
+  </div>
+
   <header class="header">
     <div class="logo-title">
-      <!-- Replace src with your SCNS logo path -->
       <img src="https://uploads.onecompiler.io/446rrd6xr/446shm87f/SCNS%20logo.png" alt="SCNS Logo" class="logo" />
       <div>
         <h1>Smart Campus Navigation System (SCNS)</h1>
@@ -78,7 +109,7 @@
             <label for="teacherName">Name</label>
             <input type="text" id="teacherName" placeholder="e.g., Rohan" />
           </div>
-          <div class="form-row">
+            <div class="form-row">
             <label for="teacherPass">Password</label>
             <input type="password" id="teacherPass" placeholder="e.g., rohan7" />
           </div>
@@ -121,7 +152,7 @@
             <div class="block-buttons">
               <button class="block-btn" data-block="S">S-Block</button>
               <button class="block-btn" data-block="R">R-Block</button>
-              <button class="block-btn" data-block="M">Main Block</button>
+              <button class="block-btn" data-block="M">M-Block</button>
             </div>
           </div>
 
@@ -169,7 +200,6 @@
 
         <!-- RIGHT: ROOM LIST + MAP + UPDATE PANELS -->
         <section class="right-panel">
-          <!-- ROOMS TABLE -->
           <section class="card">
             <h3>Rooms List</h3>
             <p class="hint">
@@ -193,7 +223,6 @@
             </div>
           </section>
 
-          <!-- 2D MAP / LAYOUT CARD -->
           <section class="card">
             <h3 id="mapTitle">Campus Map – Overview</h3>
             <p class="hint">
@@ -207,7 +236,6 @@
             />
           </section>
 
-          <!-- PHASE 2: CR UPDATE PANEL -->
           <section class="card">
             <h3>CR: Update Room Status</h3>
             <p class="hint">
@@ -229,7 +257,6 @@
             <button id="crUpdateBtn" class="btn primary">Update Room Status</button>
           </section>
 
-          <!-- PHASE 2: TEACHER CLASS UPDATE PANEL -->
           <section class="card">
             <h3>Teacher: Update Class & Status</h3>
             <p class="hint">
@@ -259,7 +286,6 @@
             <button id="teacherUpdateBtn" class="btn primary">Update Class & Status</button>
           </section>
 
-          <!-- IMPORTANT LOCATIONS -->
           <section class="card">
             <h3>Important Locations</h3>
             <p class="hint">Quick access to office, auditorium, library, canteen, etc.</p>
@@ -283,9 +309,10 @@
   </main>
 
   <footer class="footer">
-    SCNS – Smart Campus Navigation System  Prototype Phase 2 (Map + CR + Teacher update)
+    SCNS – Smart Campus Navigation System Prototype Phase 2 (Map + CR + Teacher update)
   </footer>
 
-  <script src="scripts.js"></script>
+  <!-- Main JS (only this, no extra chatbot script below) -->
+  <script src="script.js"></script>
 </body>
 </html>
