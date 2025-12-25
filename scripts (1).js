@@ -1,4 +1,6 @@
-// MAP IMAGE URLS – paste your links here
+// =========================
+// MAP IMAGE URLS
+// =========================
 const URL_MAP_MAIN = "https://uploads.onecompiler.io/446rrd6xr/446shm87f/map_main.png.jpg";
 const URL_S_GROUND = "https://uploads.onecompiler.io/446rrd6xr/446shm87f/s_ground.png.jpg";
 const URL_S_FIRST  = "https://uploads.onecompiler.io/446rrd6xr/446shm87f/s_first.png.jpg";
@@ -12,7 +14,10 @@ const URL_M_GROUND = "https://uploads.onecompiler.io/446rrd6xr/446shm87f/m_groun
 const URL_M_FIRST  = "https://uploads.onecompiler.io/446rrd6xr/446shm87f/m_first.png.jpg";
 const URL_M_SECOND = "https://uploads.onecompiler.io/446rrd6xr/446shm87f/m_second.png.jpg";
 
-//  LOGIN & ROLE HANDLING
+
+// =========================
+// LOGIN & ROLE HANDLING
+// =========================
 
 let currentRole = "Guest"; // "Guest" | "Student" | "Teacher" | "CR"
 
@@ -48,81 +53,6 @@ const teacherPass = document.getElementById("teacherPass");
 const crName = document.getElementById("crName");
 const crPass = document.getElementById("crPass");
 
-//  ROOM & FILTER ELEMENTS
-
-const floorSelect = document.getElementById("floorSelect");
-const typeFilter = document.getElementById("typeFilter");
-const vacantFilter = document.getElementById("vacantFilter");
-const classFilter = document.getElementById("classFilter");
-
-const roomSearchInput = document.getElementById("roomSearchInput");
-const roomSearchBtn = document.getElementById("roomSearchBtn");
-const searchResult = document.getElementById("searchResult");
-
-const roomsTableBody = document.getElementById("roomsTableBody");
-const importantTableBody = document.getElementById("importantTableBody");
-
-// MAP ELEMENTS
-const mapTitle = document.getElementById("mapTitle");
-const mapImage = document.getElementById("mapImage");
-
-//  PHASE 2: CR & TEACHER UPDATE ELEMENTS
-
-const crRoomSelect = document.getElementById("crRoomSelect");
-const crStatusSelect = document.getElementById("crStatusSelect");
-const crUpdateBtn = document.getElementById("crUpdateBtn");
-
-const teacherRoomSelect = document.getElementById("teacherRoomSelect");
-const teacherClassInput = document.getElementById("teacherClassInput");
-const teacherStatusSelect = document.getElementById("teacherStatusSelect");
-const teacherUpdateBtn = document.getElementById("teacherUpdateBtn");
-
-//  DATA: ROOMS (WITH currentClass FIELD)
-
-let selectedBlock = "S";
-let selectedFloor = "Ground";
-
-const floorsByBlock = {
-  S: ["Ground", "First", "Second"],
-  R: ["Ground", "First", "Second"],
-  M: ["Ground", "First", "Second"]
-};
-
-const rooms = [
-  // S-Block
-  { roomNo: "S101", block: "S", floor: "Ground", type: "Classroom", status: "Vacant", currentClass: "" },
-  { roomNo: "S102", block: "S", floor: "Ground", type: "Classroom", status: "Occupied", currentClass: "" },
-  { roomNo: "S201", block: "S", floor: "First", type: "Lab", status: "Occupied", currentClass: "" },
-  { roomNo: "S202", block: "S", floor: "First", type: "Classroom", status: "Vacant", currentClass: "" },
-  { roomNo: "S301", block: "S", floor: "Second", type: "Lab", status: "Vacant", currentClass: "" },
-
-  // R-Block
-  { roomNo: "R101", block: "R", floor: "Ground", type: "Classroom", status: "Vacant", currentClass: "" },
-  { roomNo: "R102", block: "R", floor: "Ground", type: "Classroom", status: "Occupied", currentClass: "" },
-  { roomNo: "R201", block: "R", floor: "First", type: "Lab", status: "Vacant", currentClass: "" },
-  { roomNo: "R202", block: "R", floor: "First", type: "Classroom", status: "Vacant", currentClass: "" },
-  { roomNo: "R301", block: "R", floor: "Second", type: "Lab", status: "Occupied", currentClass: "" },
-
-  // Main Block
-  { roomNo: "M101", block: "M", floor: "Ground", type: "Office", status: "Occupied", currentClass: "" },
-  { roomNo: "M102", block: "M", floor: "Ground", type: "Facility", status: "Vacant", currentClass: "" },
-  { roomNo: "M201", block: "M", floor: "First", type: "Classroom", status: "Vacant", currentClass: "" },
-  { roomNo: "M202", block: "M", floor: "First", type: "Classroom", status: "Occupied", currentClass: "" },
-  { roomNo: "M301", block: "M", floor: "Second", type: "Lab", status: "Vacant", currentClass: "" }
-];
-
-// IMPORTANT LOCATIONS DATA
-
-const importantLocations = [
-  { name: "Principal Office", location: "M101", block: "M", floor: "Ground" },
-  { name: "Department Office CSE", location: "S201", block: "S", floor: "First" },
-  { name: "Main Library", location: "M201", block: "M", floor: "First" },
-  { name: "Auditorium", location: "M102", block: "M", floor: "Ground" },
-  { name: "Canteen", location: "Near R-Block", block: "R", floor: "Ground Area" }
-];
-
-//  HELPERS
-
 function setRole(role, userLabelText, infoText) {
   currentRole = role;
   currentRoleLabel.textContent = `Role: ${role}`;
@@ -148,65 +78,18 @@ function showWelcomeScreen() {
   roleInfoLabel.textContent = "";
 }
 
-//  MAP LOGIC
-
-function updateMapImage() {
-  if (!mapImage || !mapTitle) return;
-
-  let imgFile = URL_MAP_MAIN;
-  let titleText = "Campus Map – Overview";
-
-  if (selectedBlock === "S") {
-    if (selectedFloor === "Ground") {
-      imgFile = URL_S_GROUND;
-      titleText = "S-Block – Ground Floor";
-    } else if (selectedFloor === "First") {
-      imgFile = URL_S_FIRST;
-      titleText = "S-Block – First Floor";
-    } else if (selectedFloor === "Second") {
-      imgFile = URL_S_SECOND;
-      titleText = "S-Block – Second Floor";
-    }
-  } else if (selectedBlock === "R") {
-    if (selectedFloor === "Ground") {
-      imgFile = URL_R_GROUND;
-      titleText = "R-Block – Ground Floor";
-    } else if (selectedFloor === "First") {
-      imgFile = URL_R_FIRST;
-      titleText = "R-Block – First Floor";
-    } else if (selectedFloor === "Second") {
-      imgFile = URL_R_SECOND;
-      titleText = "R-Block – Second Floor";
-    }
-  } else if (selectedBlock === "M") {
-    if (selectedFloor === "Ground") {
-      imgFile = URL_M_GROUND;
-      titleText = "Main Block – Ground Floor";
-    } else if (selectedFloor === "First") {
-      imgFile = URL_M_FIRST;
-      titleText = "Main Block – First Floor";
-    } else if (selectedFloor === "Second") {
-      imgFile = URL_M_SECOND;
-      titleText = "Main Block – Second Floor";
-    }
-  }
-
-  mapImage.src = imgFile;
-  mapTitle.textContent = titleText;
-}
-
-//  LOGIN FLOW
-
+// guest
 guestBtn.addEventListener("click", () => {
   setRole("Guest", "Guest user", "Can explore blocks, floors, rooms, map, and important locations.");
   showAppScreen();
 });
 
+// show/hide login options
 loginBtn.addEventListener("click", () => {
   loginOptions.classList.toggle("hidden");
 });
 
-// choose which login form
+// select which login form
 studentLoginBtn.addEventListener("click", () => {
   studentLoginForm.classList.remove("hidden");
   teacherLoginForm.classList.add("hidden");
@@ -271,7 +154,136 @@ crSubmitBtn.addEventListener("click", () => {
 // back button
 backToWelcomeBtn.addEventListener("click", showWelcomeScreen);
 
-//  BLOCK & FLOOR HANDLING
+
+// =========================
+// ROOM & FILTER ELEMENTS
+// =========================
+
+const floorSelect = document.getElementById("floorSelect");
+const typeFilter = document.getElementById("typeFilter");
+const vacantFilter = document.getElementById("vacantFilter");
+const classFilter = document.getElementById("classFilter");
+
+const roomSearchInput = document.getElementById("roomSearchInput");
+const roomSearchBtn = document.getElementById("roomSearchBtn");
+const searchResult = document.getElementById("searchResult");
+
+const roomsTableBody = document.getElementById("roomsTableBody");
+const importantTableBody = document.getElementById("importantTableBody");
+
+// map
+const mapTitle = document.getElementById("mapTitle");
+const mapImage = document.getElementById("mapImage");
+
+// PHASE 2: CR & TEACHER UPDATE ELEMENTS
+const crRoomSelect = document.getElementById("crRoomSelect");
+const crStatusSelect = document.getElementById("crStatusSelect");
+const crUpdateBtn = document.getElementById("crUpdateBtn");
+
+const teacherRoomSelect = document.getElementById("teacherRoomSelect");
+const teacherClassInput = document.getElementById("teacherClassInput");
+const teacherStatusSelect = document.getElementById("teacherStatusSelect");
+const teacherUpdateBtn = document.getElementById("teacherUpdateBtn");
+
+
+// =========================
+// DATA
+// =========================
+
+let selectedBlock = "S";
+let selectedFloor = "Ground";
+
+const floorsByBlock = {
+  S: ["Ground", "First", "Second"],
+  R: ["Ground", "First", "Second"],
+  M: ["Ground", "First", "Second"]
+};
+
+const rooms = [
+  // S-Block
+  { roomNo: "S101", block: "S", floor: "Ground", type: "Classroom", status: "Vacant", currentClass: "" },
+  { roomNo: "S102", block: "S", floor: "Ground", type: "Classroom", status: "Occupied", currentClass: "" },
+  { roomNo: "S201", block: "S", floor: "First", type: "Lab", status: "Occupied", currentClass: "" },
+  { roomNo: "S202", block: "S", floor: "First", type: "Classroom", status: "Vacant", currentClass: "" },
+  { roomNo: "S301", block: "S", floor: "Second", type: "Lab", status: "Vacant", currentClass: "" },
+
+  // R-Block
+  { roomNo: "R101", block: "R", floor: "Ground", type: "Classroom", status: "Vacant", currentClass: "" },
+  { roomNo: "R102", block: "R", floor: "Ground", type: "Classroom", status: "Occupied", currentClass: "" },
+  { roomNo: "R201", block: "R", floor: "First", type: "Lab", status: "Vacant", currentClass: "" },
+  { roomNo: "R202", block: "R", floor: "First", type: "Classroom", status: "Vacant", currentClass: "" },
+  { roomNo: "R301", block: "R", floor: "Second", type: "Lab", status: "Occupied", currentClass: "" },
+
+  // Main Block
+  { roomNo: "M101", block: "M", floor: "Ground", type: "Office", status: "Occupied", currentClass: "" },
+  { roomNo: "M102", block: "M", floor: "Ground", type: "Facility", status: "Vacant", currentClass: "" },
+  { roomNo: "M201", block: "M", floor: "First", type: "Classroom", status: "Vacant", currentClass: "" },
+  { roomNo: "M202", block: "M", floor: "First", type: "Classroom", status: "Occupied", currentClass: "" },
+  { roomNo: "M301", block: "M", floor: "Second", type: "Lab", status: "Vacant", currentClass: "" }
+];
+
+const importantLocations = [
+  { name: "Principal Office", location: "M101", block: "M", floor: "Ground" },
+  { name: "Department Office CSE", location: "S201", block: "S", floor: "First" },
+  { name: "Main Library", location: "M201", block: "M", floor: "First" },
+  { name: "Auditorium", location: "M102", block: "M", floor: "Ground" },
+  { name: "Canteen", location: "Near R-Block", block: "R", floor: "Ground Area" }
+];
+
+
+// =========================
+// MAP LOGIC
+// =========================
+
+function updateMapImage() {
+  if (!mapImage || !mapTitle) return;
+
+  let imgFile = URL_MAP_MAIN;
+  let titleText = "Campus Map – Overview";
+
+  if (selectedBlock === "S") {
+    if (selectedFloor === "Ground") {
+      imgFile = URL_S_GROUND;
+      titleText = "S-Block – Ground Floor";
+    } else if (selectedFloor === "First") {
+      imgFile = URL_S_FIRST;
+      titleText = "S-Block – First Floor";
+    } else if (selectedFloor === "Second") {
+      imgFile = URL_S_SECOND;
+      titleText = "S-Block – Second Floor";
+    }
+  } else if (selectedBlock === "R") {
+    if (selectedFloor === "Ground") {
+      imgFile = URL_R_GROUND;
+      titleText = "R-Block – Ground Floor";
+    } else if (selectedFloor === "First") {
+      imgFile = URL_R_FIRST;
+      titleText = "R-Block – First Floor";
+    } else if (selectedFloor === "Second") {
+      imgFile = URL_R_SECOND;
+      titleText = "R-Block – Second Floor";
+    }
+  } else if (selectedBlock === "M") {
+    if (selectedFloor === "Ground") {
+      imgFile = URL_M_GROUND;
+      titleText = "Main Block – Ground Floor";
+    } else if (selectedFloor === "First") {
+      imgFile = URL_M_FIRST;
+      titleText = "Main Block – First Floor";
+    } else if (selectedFloor === "Second") {
+      imgFile = URL_M_SECOND;
+      titleText = "Main Block – Second Floor";
+    }
+  }
+
+  mapImage.src = imgFile;
+  mapTitle.textContent = titleText;
+}
+
+
+// =========================
+// BLOCK & FLOOR HANDLING
+// =========================
 
 const blockButtons = document.querySelectorAll(".block-btn");
 
@@ -306,7 +318,10 @@ floorSelect.addEventListener("change", () => {
   updateMapImage();
 });
 
-//  FILTERS & SEARCH
+
+// =========================
+// FILTERS & SEARCH
+// =========================
 
 typeFilter.addEventListener("change", () => renderRoomsTable(rooms));
 vacantFilter.addEventListener("change", () => renderRoomsTable(rooms));
@@ -343,7 +358,10 @@ function searchRoom() {
   `;
 }
 
-//  TABLE RENDERING
+
+// =========================
+// TABLE RENDERING
+// =========================
 
 function renderRoomsTable(data) {
   roomsTableBody.innerHTML = "";
@@ -391,7 +409,10 @@ function renderRoomsTable(data) {
   });
 }
 
+
+// =========================
 // IMPORTANT LOCATIONS TABLE
+// =========================
 
 function renderImportantTable() {
   importantTableBody.innerHTML = "";
@@ -419,7 +440,10 @@ function renderImportantTable() {
   });
 }
 
-//  PHASE 2: CR UPDATE LOGIC
+
+// =========================
+// PHASE 2: CR UPDATE LOGIC
+// =========================
 
 function populateCrRoomSelect() {
   crRoomSelect.innerHTML = "";
@@ -458,7 +482,10 @@ function crUpdateRoom() {
 
 crUpdateBtn.addEventListener("click", crUpdateRoom);
 
-//  PHASE 2: TEACHER CLASS & STATUS UPDATE LOGIC
+
+// =========================
+// PHASE 2: TEACHER UPDATE LOGIC
+// =========================
 
 function populateTeacherRoomSelect() {
   teacherRoomSelect.innerHTML = "";
@@ -501,7 +528,10 @@ function teacherUpdateRoom() {
 
 teacherUpdateBtn.addEventListener("click", teacherUpdateRoom);
 
-//  INITIAL SETUP
+
+// =========================
+// INITIAL SETUP
+// =========================
 
 function init() {
   const defaultBtn = document.querySelector('.block-btn[data-block="S"]') || blockButtons[0];
@@ -516,3 +546,135 @@ function init() {
 }
 
 init();
+
+
+// =========================
+// SCNS AI CHATBOT – FINAL
+// =========================
+
+const CHAT_API_URL = "https://scns-backend-ikvx.onrender.com/chat";
+
+function initChatbot() {
+  console.log("🔧 Initializing SCNS Chatbot...");
+
+  const toggleBtn = document.getElementById("chatbotToggle");
+  const widget = document.getElementById("chatbotWidget");
+  const closeBtn = document.getElementById("chatbotCloseBtn");
+  const fullscreenBtn = document.getElementById("chatbotFullscreen");
+  const messagesEl = document.getElementById("chatbotMessages");
+  const typingEl = document.getElementById("chatbotTyping");
+  const inputEl = document.getElementById("chatbotInput");
+  const sendBtn = document.getElementById("chatbotSendBtn");
+
+  if (!toggleBtn || !widget || !messagesEl || !inputEl || !sendBtn) {
+    console.warn("Chatbot elements missing, skipping init");
+    return;
+  }
+
+  function addChatMessage(text, sender = "bot") {
+    const div = document.createElement("div");
+    div.classList.add("chatbot-message", sender === "user" ? "user" : "bot");
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function setTyping(text) {
+    if (!typingEl) return;
+    typingEl.textContent = text || "";
+  }
+
+  async function handleSend() {
+    const msg = inputEl.value.trim();
+    if (!msg) return;
+
+    addChatMessage(msg, "user");
+    inputEl.value = "";
+
+    // lock input while sending
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+    setTyping("SCNS is thinking...");
+
+    try {
+      const res = await fetch(CHAT_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, role: "Guest" }),
+      });
+
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+
+      setTyping("");
+
+      if (!res.ok) {
+        addChatMessage("Server error. Please try again.", "bot");
+        return;
+      }
+
+      if (data.reply) {
+        addChatMessage(data.reply, "bot");
+      } else if (data.error) {
+        addChatMessage("Error: " + data.error, "bot");
+      } else {
+        addChatMessage("No reply received from backend.", "bot");
+      }
+    } catch (err) {
+      console.error("Chat error:", err);
+      setTyping("");
+      addChatMessage("Network error. Please check your connection.", "bot");
+    } finally {
+      inputEl.disabled = false;
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }
+  }
+
+  // Open/close
+  toggleBtn.addEventListener("click", () => {
+    widget.classList.toggle("hidden");
+    if (!widget.classList.contains("hidden")) {
+      inputEl.focus();
+    }
+  });
+
+  if (closeBtn) {
+    const closeFn = (e) => {
+      e && e.stopPropagation();
+      widget.classList.add("hidden");
+    };
+    closeBtn.addEventListener("click", closeFn);
+    closeBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      closeFn(e);
+    });
+  }
+
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener("click", () => {
+      widget.classList.toggle("fullscreen");
+    });
+  }
+
+  // Send handlers
+  sendBtn.addEventListener("click", handleSend);
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSend();
+    }
+  });
+
+  console.log("✅ Chatbot ready!");
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initChatbot);
+} else {
+  initChatbot();
+}
